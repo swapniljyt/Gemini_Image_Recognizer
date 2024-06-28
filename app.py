@@ -35,10 +35,19 @@ st.header("Gemini Application")
 # User inputs
 input_text = st.text_input("Input Prompt:", key="input")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-image=""
+
 # Display the uploaded image
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image.",use_column_width=True)
-    
+    st.image(image, caption="Uploaded Image.", use_column_width=True)
 
+submit = st.button("Tell me about the invoice")
+
+input_prompts = """You are an expert in understanding invoices. You will receive input images as invoices and you will have to answer 
+questions based on the input image."""
+
+if submit:
+    image_parts = input_image_setup(uploaded_file)
+    response = get_gemini_response(input_text, image_parts, input_prompts)
+    st.subheader("The Response is:")
+    st.write(response)
